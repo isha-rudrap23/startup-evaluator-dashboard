@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Startup Evaluator</title>
+<meta charset="UTF-8">
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(135deg,#667eea,#764ba2);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.container{
+background:white;
+padding:40px;
+width:420px;
+border-radius:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+h1{
+text-align:center;
+margin-bottom:25px;
+}
+
+label{
+font-weight:bold;
+font-size:14px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:15px;
+border:1px solid #ccc;
+border-radius:5px;
+font-size:14px;
+}
+
+input:focus{
+outline:none;
+border-color:#667eea;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+margin-top:10px;
+}
+
+.evaluate{
+background:#667eea;
+color:white;
+}
+
+.evaluate:hover{
+background:#5563d6;
+}
+
+.dashboard{
+background:#2ecc71;
+color:white;
+display:none;
+}
+
+.dashboard:hover{
+background:#27ae60;
+}
+
+.result{
+margin-top:20px;
+font-weight:bold;
+text-align:center;
+font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Evaluate Startup</h1>
+
+<label>Startup Idea Name</label>
+<input type="text" id="ideaName" placeholder="Example: AI Fitness App" required>
+
+<label>Market Size (1-10)</label>
+<input type="number" id="marketSize" min="1" max="10" required>
+
+<label>Competition (1-10)</label>
+<input type="number" id="competition" min="1" max="10" required>
+
+<label>Cost (1-10)</label>
+<input type="number" id="cost" min="1" max="10" required>
+
+<label>Scalability (1-10)</label>
+<input type="number" id="scalability" min="1" max="10" required>
+
+<label>Innovation (1-10)</label>
+<input type="number" id="innovation" min="1" max="10" required>
+
+<button class="evaluate" onclick="evaluateStartup()">Evaluate Startup</button>
+
+<p class="result" id="result"></p>
+
+<button class="dashboard" id="dashboardBtn" onclick="goDashboard()">
+Go To Dashboard
+</button>
+
+</div>
+
+<script>
+
+
+function evaluateStartup(){
+
+let data={
+
+ideaName:document.getElementById("ideaName").value,
+marketSize:document.getElementById("marketSize").value,
+competition:document.getElementById("competition").value,
+cost:document.getElementById("cost").value,
+scalability:document.getElementById("scalability").value,
+innovation:document.getElementById("innovation").value
+
+};
+
+fetch("/evaluate",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(data)
+})
+.then(res=>res.json())
+.then(response=>{
+
+document.getElementById("result").innerText =
+"Startup Score: "+response.score;
+
+document.getElementById("dashboardBtn").style.display="block";
+
+});
+
+}
+
+function goDashboard(){
+
+window.location.href="/dashboard.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
